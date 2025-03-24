@@ -5,8 +5,11 @@ import (
 	"os"
 	"strings"
 
+	"github.com/GIT_USER_ID/GIT_REPO_ID/api"
+	"github.com/GIT_USER_ID/GIT_REPO_ID/internal/ambulance_wl"
 	"github.com/gin-gonic/gin"
-	"github.com/tbocinec/test/api"
+	//"github.com/tbocinec/test/api"
+	//"github.com/tbocinec/test/internal/ambulance_wl"
 )
 
 func main() {
@@ -22,6 +25,11 @@ func main() {
 	engine := gin.New()
 	engine.Use(gin.Recovery())
 	// request routings
+	handleFunctions := &ambulance_wl.ApiHandleFunctions{
+		AmbulanceConditionsAPI:  ambulance_wl.NewAmbulanceConditionsApi(),
+		AmbulanceWaitingListAPI: ambulance_wl.NewAmbulanceWaitingListApi(),
+	}
+	ambulance_wl.NewRouterWithGinEngine(engine, *handleFunctions)
 	engine.GET("/openapi", api.HandleOpenApi)
 	engine.Run(":" + port)
 }
